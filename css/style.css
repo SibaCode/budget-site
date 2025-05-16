@@ -1,53 +1,5 @@
-
-  .card {
-    border: none;
-    border-radius: 1rem;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-  }
-  .hero {
-    background: linear-gradient(to right, #ff7e5f, #feb47b);
-    color: white;
-    padding: 100px 20px 60px;
-    text-align: center;
-  }
-  .hero img {
-    height: 100px;
-    margin-bottom: 25px;
-  }
-  .feature-icon {
-    font-size: 40px;
-    color: #ff7e5f;
-  }
-  footer {
-    background: #222;
-    color: #aaa;
-    text-align: center;
-    padding: 20px;
-  }
-
-  .price-tag {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: #28a745;
-  }
-  .btn-rounded {
-    border-radius: 50px;
-  }
-
-  .fixed-whatsapp {
-    position: fixed;
-    bottom: 70px;
-    right: 15px;
-    z-index: 9999;
-  }
-  @media (max-width: 768px) {
-    h1 {
-      font-size: 1.5rem;
-    }
-  
-  }
-
-  body {
+/* General styles */
+body {
     font-family: 'Poppins', sans-serif;
     background-color: #f8f9fa;
     min-height: 100vh;
@@ -55,11 +7,15 @@
     flex-direction: column;
     align-items: center;
     padding: 2rem 1rem;
+    margin: -36px;
   }
+  
   .container-custom {
     max-width: 700px;
     width: 100%;
   }
+  
+  /* Cards */
   .card {
     border: none;
     border-radius: 1rem;
@@ -68,17 +24,21 @@
     margin-bottom: 1.8rem;
     background: white;
   }
+  
+  /* Header and Typography */
   h1 {
     font-weight: 700;
     margin-bottom: 0.25rem;
     font-size: 2.25rem;
     color: #212529;
   }
+  
   p.subtitle {
     color: #6c757d;
     font-size: 1rem;
     margin-bottom: 2rem;
   }
+  
   label {
     font-weight: 600;
     font-size: 1.1rem;
@@ -86,25 +46,33 @@
     display: block;
     color: #333;
   }
+  
   select.form-select {
     height: 48px;
     font-size: 1rem;
     border-radius: 0.75rem;
     padding-left: 1rem;
   }
+  
+  /* Buttons */
   .btn-rounded {
     border-radius: 50px;
     font-weight: 600;
     padding: 0.6rem 1.5rem;
     font-size: 1.1rem;
   }
+  
+  /* Flex Utilities */
   .d-flex.gap-3.mb-3 {
     justify-content: center;
   }
+  
+  /* List group */
   ul.list-group {
     max-height: 280px;
     overflow-y: auto;
   }
+  
   .list-group-item {
     font-weight: 500;
     font-size: 1rem;
@@ -112,23 +80,31 @@
     margin-bottom: 0.5rem;
     border: 1px solid #ddd;
   }
+  
   .list-group-item:last-child {
     margin-bottom: 0;
   }
+  
+  /* Badges */
   .badge {
     font-size: 1rem;
     padding: 0.4em 0.9em;
     background-color: #0d6efd;
   }
+  
+  /* Summary */
   .summary p {
     font-size: 1.15rem;
     margin-bottom: 0.4rem;
     font-weight: 600;
     color: #444;
   }
+  
   .summary p strong {
     color: #212529;
   }
+  
+  /* Footer */
   .footer {
     font-size: 0.875rem;
     color: #888;
@@ -136,6 +112,47 @@
     text-align: center;
     user-select: none;
   }
+  
+  /* Hero section */
+  .hero {
+    background: linear-gradient(to right, #ff7e5f, #feb47b);
+    color: white;
+    height: 60vh;
+    width: 100vw;
+    text-align: center;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .hero img {
+    height: 242px;
+    margin-bottom: -52px;
+    margin-top: -66px;
+}
+  /* Feature icon */
+  .feature-icon {
+    font-size: 40px;
+    color: #ff7e5f;
+  }
+  
+  /* Footer styling */
+  footer {
+    background: #222;
+    color: #aaa;
+    text-align: center;
+    padding: 20px;
+  }
+  
+  /* Price Tag */
+  .price-tag {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #28a745;
+  }
+  
+  /* Fixed WhatsApp button */
   .fixed-whatsapp {
     position: fixed;
     bottom: 30px;
@@ -145,12 +162,14 @@
     font-size: 1.3rem;
     padding: 0.75rem 1.5rem;
   }
-  @media (max-width: 767px) {
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
     body {
       padding: 1rem 0.5rem;
     }
     h1 {
-      font-size: 1.75rem;
+      font-size: 1.5rem;
     }
     .card {
       padding: 1rem 1.2rem;
@@ -160,8 +179,4 @@
       padding: 0.5rem 1.2rem;
     }
   }
-  .hero img {
-    height: 360px;
-    margin-bottom: -80px;
-    margin-top: -221px;
-}
+  
