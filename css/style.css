@@ -153,7 +153,7 @@ body {
   }
   
   /* Fixed WhatsApp button */
-  .fixed-whatsapp {
+/*   .fixed-whatsapp {
     position: fixed;
     bottom: 30px;
     right: 30px;
@@ -161,7 +161,7 @@ body {
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     font-size: 1.3rem;
     padding: 0.75rem 1.5rem;
-  }
+  } */
   
   /* Responsive adjustments */
   @media (max-width: 768px) {
