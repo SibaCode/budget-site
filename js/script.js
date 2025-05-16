@@ -1,141 +1,127 @@
-// script.js
 let budgetData = {};
-let currentMonth = new Date().toLocaleString('default', { month: 'long' });
-const months = [
-  "January", "February", "March", "April", "May", "June",
-  "July", "August", "September", "October", "November", "December"
-];
+let currentMonth = '';
 
-// Initialize month select
-const monthSelect = document.getElementById("monthSelect");
-months.forEach(month => {
-  const option = document.createElement("option");
-  option.value = month;
-  option.text = month;
-  if (month === currentMonth) option.selected = true;
-  monthSelect.appendChild(option);
-});
+function populateMonthSelect() {
+  const monthSelect = document.getElementById('monthSelect');
+  const months = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+  ];
+
+  months.forEach((month) => {
+    const option = document.createElement('option');
+    option.value = month;
+    option.textContent = month;
+    monthSelect.appendChild(option);
+  });
+
+  const now = new Date();
+  currentMonth = months[now.getMonth()];
+  monthSelect.value = currentMonth;
+
+  if (!budgetData[currentMonth]) {
+    budgetData[currentMonth] = {
+      income: 0,
+      expenses: []
+    };
+  }
+
+  updateUI();
+}
 
 function switchMonth() {
-  currentMonth = document.getElementById("monthSelect").value;
-  renderData();
+  currentMonth = document.getElementById('monthSelect').value;
+  if (!budgetData[currentMonth]) {
+    budgetData[currentMonth] = {
+      income: 0,
+      expenses: []
+    };
+  }
+  updateUI();
 }
 
-function setIncome() {
-  const income = parseFloat(document.getElementById("incomeInput").value);
-  if (!budgetData[currentMonth]) budgetData[currentMonth] = { income: 0, expenses: [] };
-  budgetData[currentMonth].income = income;
-  renderData();
-  saveData();
+// Add income from modal, sums to current income
+function addIncomeFromModal() {
+  const input = document.getElementById('incomeInputModal');
+  const errorMsg = document.getElementById('incomeError');
+  const amount = parseFloat(input.value);
+
+  if (!isNaN(amount) && amount > 0) {
+    budgetData[currentMonth].income += amount;
+    updateUI();
+    input.value = '';
+    errorMsg.style.display = 'none';
+
+    const incomeModal = bootstrap.Modal.getInstance(document.getElementById('incomeModal'));
+    incomeModal.hide();
+  } else {
+    errorMsg.style.display = 'block';
+  }
 }
 
-function addExpense() {
-  const name = document.getElementById("expenseName").value;
-  const amount = parseFloat(document.getElementById("expenseAmount").value);
-  if (!name || isNaN(amount)) return;
+// Add expense from modal
+function addExpenseFromModal() {
+  const nameInput = document.getElementById('expenseNameModal');
+  const amountInput = document.getElementById('expenseAmountModal');
+  const nameError = document.getElementById('expenseNameError');
+  const amountError = document.getElementById('expenseAmountError');
 
-  if (!budgetData[currentMonth]) budgetData[currentMonth] = { income: 0, expenses: [] };
-  budgetData[currentMonth].expenses.push({ name, amount, paid: false, paidDate: null });
-  renderData();
-  saveData();
-  document.getElementById("expenseName").value = "";
-  document.getElementById("expenseAmount").value = "";
+  const name = nameInput.value.trim();
+  const amount = parseFloat(amountInput.value);
+
+  let valid = true;
+
+  if (!name) {
+    nameError.style.display = 'block';
+    valid = false;
+  } else {
+    nameError.style.display = 'none';
+  }
+
+  if (isNaN(amount) || amount <= 0) {
+    amountError.style.display = 'block';
+    valid = false;
+  } else {
+    amountError.style.display = 'none';
+  }
+
+  if (valid) {
+    budgetData[currentMonth].expenses.push({ name, amount });
+    updateUI();
+    nameInput.value = '';
+    amountInput.value = '';
+
+    const expenseModal = bootstrap.Modal.getInstance(document.getElementById('expenseModal'));
+    expenseModal.hide();
+  }
 }
 
-function togglePaid(index) {
-  const expense = budgetData[currentMonth].expenses[index];
-  expense.paid = !expense.paid;
-  expense.paidDate = expense.paid ? new Date().toLocaleDateString() : null;
-  renderData();
-  saveData();
-}
+function updateUI() {
+  const data = budgetData[currentMonth];
+  document.getElementById('totalIncome').textContent = data.income.toFixed(2);
 
-function deleteExpense(index) {
-  budgetData[currentMonth].expenses.splice(index, 1);
-  renderData();
-  saveData();
-}
-
-function renderData() {
-  const list = document.getElementById("expenseList");
-  list.innerHTML = "";
-
-  if (!budgetData[currentMonth]) budgetData[currentMonth] = { income: 0, expenses: [] };
-
+  const list = document.getElementById('expenseList');
+  list.innerHTML = '';
   let totalPaid = 0;
 
-  budgetData[currentMonth].expenses.forEach((item, index) => {
-    if (item.paid) totalPaid += item.amount;
-
-    const li = document.createElement("li");
+  data.expenses.forEach((expense) => {
+    totalPaid += expense.amount;
+    const li = document.createElement('li');
     li.className = "list-group-item d-flex justify-content-between align-items-center";
-
-    li.innerHTML = `
-      <div>
-        <input type="checkbox" class="form-check-input me-2" ${item.paid ? "checked" : ""} onclick="togglePaid(${index})">
-        ${item.name} - R${item.amount.toFixed(2)}
-        ${item.paidDate ? `<small class="text-muted ms-2">(Paid on ${item.paidDate})</small>` : ""}
-      </div>
-      <button class="btn btn-sm btn-danger" onclick="deleteExpense(${index})">Delete</button>
-    `;
-
+    li.textContent = expense.name;
+    const span = document.createElement('span');
+    span.className = "badge bg-primary rounded-pill";
+    span.textContent = `R${expense.amount.toFixed(2)}`;
+    li.appendChild(span);
     list.appendChild(li);
   });
 
-  document.getElementById("totalIncome").innerText = budgetData[currentMonth].income.toFixed(2);
-  document.getElementById("totalPaid").innerText = totalPaid.toFixed(2);
-  document.getElementById("balance").innerText = (budgetData[currentMonth].income - totalPaid).toFixed(2);
+  document.getElementById('totalPaid').textContent = totalPaid.toFixed(2);
 
-  updateChart();
+  const balance = data.income - totalPaid;
+  document.getElementById('balance').textContent = balance.toFixed(2);
 }
 
-// Chart.js setup
-const ctx = document.getElementById('spendingChart').getContext('2d');
-let spendingChart = new Chart(ctx, {
-  type: 'bar',
-  data: {
-    labels: [],
-    datasets: [{
-      label: 'Total Spent (R)',
-      data: [],
-      backgroundColor: 'rgba(255, 99, 132, 0.5)',
-      borderColor: 'rgba(255, 99, 132, 1)',
-      borderWidth: 1
-    }]
-  },
-  options: {
-    scales: {
-      y: {
-        beginAtZero: true
-      }
-    }
-  }
-});
-
-function updateChart() {
-  spendingChart.data.labels = [];
-  spendingChart.data.datasets[0].data = [];
-
-  for (let month of months) {
-    if (budgetData[month]) {
-      const paid = budgetData[month].expenses.filter(e => e.paid).reduce((sum, e) => sum + e.amount, 0);
-      spendingChart.data.labels.push(month);
-      spendingChart.data.datasets[0].data.push(paid);
-    }
-  }
-  spendingChart.update();
-}
-
-function saveData() {
-  localStorage.setItem("budgetData", JSON.stringify(budgetData));
-}
-
-function loadData() {
-  const data = localStorage.getItem("budgetData");
-  if (data) {
-    budgetData = JSON.parse(data);
-  }
-}
-
-loadData();
-renderData();
+window.onload = () => {
+  populateMonthSelect();
+};
