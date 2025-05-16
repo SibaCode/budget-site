@@ -1,0 +1,27 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  h1, h5 {
+    color: #343a40;
+  }
+  
+  .card {
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  }
+  
+  .btn-primary {
+    background-color: #ff6600;
+    border-color: #ff6600;
+  }
+  
+  .btn-primary:hover {
+    background-color: #e65c00;
+    border-color: #e65c00;
+  }
+  
+  #spendingChart {
+    margin-top: 20px;
+  }
+  
